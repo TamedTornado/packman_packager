@@ -1,6 +1,10 @@
 import argparse, os, string, logging, tempfile, glob, shutil, errno, io, sys
 from string import Template
 
+packman_common_path = os.environ['PM_packman_common_PATH']
+sys.path.append(packman_common_path)
+
+import packmanapi
 
 logging.basicConfig(level=logging.WARNING, format="packaging(%(levelname)s): %(message)s")
 logger = logging.getLogger('packaging')
@@ -77,11 +81,12 @@ def main(argv=None):
 
     # Sanity check - more than one platform matches?
 
-    dirs = glob.glob("%s\%s*" % (args.rootdir, args.platform))
+    search_pattern = os.path.join(args.rootdir, args.platform)
+    search_pattern += '*'
+    dirs = glob.glob(search_pattern)
 
     if len(dirs) < 2:
-        print "Only %d directories matched '%s\%s*' - need at least two for this script." % (len(dirs), args.rootdir,
-                                                                                             args.platform)
+        print "Only %d directories matched '%s' - need at least two for this script." % (len(dirs), search_pattern)
         exit(1)
 
     # Script template exists?
@@ -170,10 +175,6 @@ def main(argv=None):
 
 
 def pack(version_path, output_path):
-    my_dir = os.path.dirname(os.path.realpath(__file__))
-    packman_dir = os.path.join(my_dir, '..', 'packman')
-    sys.path.append(packman_dir)
-    import packmanapi
     packmanapi.pack(version_path, output_path)
 
 
