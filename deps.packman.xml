@@ -1,0 +1,11 @@
+<project toolsVersion="4.0" packageSource="s3">
+	<platform name="common">
+		<dependency name="packman-common" version="4.2-rc1"/>
+	</platform>
+	<platform name="win" inherit="common">
+	</platform>
+	<platform name="linux" inherit="common">
+	</platform>
+	<platform name="macos" inherit="common">
+	</platform>
+</project>
